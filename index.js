@@ -3,26 +3,19 @@ const fs = require('fs-extra');
 const glob = require('glob');
 const svg2png = require('svg2png');
 const posthtml = require('posthtml');
+const config = require('./config.js');
 
 // -----------------------------------------------------------------------------
 
-const svgRoot = '/Users/grape/Sources/sync-icons/icons/svg';
-const originalColor = {name: 'white', value: ['#fff', '#f1f1f1']};
-const generateColors = [
-  {name: 'black', value: '#000'}
-];
-
-// -----------------------------------------------------------------------------
-
-const originalColorFiles = glob.sync(`${svgRoot}/${originalColor.name}/**/*.svg`);
+const originalColorFiles = glob.sync(`${config.svgRoot}/${config.originalColor.name}/**/*.svg`);
 
 originalColorFiles.forEach(filePath => {
   const svg = fs.readFileSync(filePath, 'utf-8');
 
-  generateColors.forEach(color => {
-    const generatedPath = filePath.replace(new RegExp(originalColor.name, 'g'), color.name);
+  config.generateColors.forEach(color => {
+    const generatedPath = filePath.replace(new RegExp(config.originalColor.name, 'g'), color.name);
 
-    colorsToReplace = [].concat(originalColor.value);
+    colorsToReplace = [].concat(config.originalColor.value);
     const generatedSvg = posthtml([
       function(tree) {
         colorsToReplace.forEach(currColor => {
@@ -42,7 +35,7 @@ originalColorFiles.forEach(filePath => {
 
 // -----------------------------------------------------------------------------
 
-const svgFiles = glob.sync(`${svgRoot}/**/*.svg`);
+const svgFiles = glob.sync(`${config.svgRoot}/**/*.svg`);
 
 svgFiles.forEach(filePath => {
   const svg = fs.readFileSync(filePath);
