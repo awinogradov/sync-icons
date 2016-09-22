@@ -6,8 +6,8 @@ const posthtml = require('posthtml');
 
 // -----------------------------------------------------------------------------
 
-const svgRoot = '/Users/grape/Sources/sync-icons/icons';
-const originalColor = {name: 'white', value: '#fff'};
+const svgRoot = '/Users/grape/Sources/sync-icons/icons/svg';
+const originalColor = {name: 'white', value: ['#fff', '#f1f1f1']};
 const generateColors = [
   {name: 'black', value: '#000'}
 ];
@@ -22,11 +22,14 @@ originalColorFiles.forEach(filePath => {
   generateColors.forEach(color => {
     const generatedPath = filePath.replace(new RegExp(originalColor.name, 'g'), color.name);
 
+    colorsToReplace = [].concat(originalColor.value);
     const generatedSvg = posthtml([
       function(tree) {
-        tree.match({attrs: {fill: originalColor.value}}, node => {
-          node.attrs.fill = color.value;
-          return node;
+        colorsToReplace.forEach(currColor => {
+          tree.match({attrs: {fill: currColor}}, node => {
+            node.attrs.fill = color.value;
+            return node;
+          });
         });
 
         return tree;
@@ -43,8 +46,9 @@ const svgFiles = glob.sync(`${svgRoot}/**/*.svg`);
 
 svgFiles.forEach(filePath => {
   const svg = fs.readFileSync(filePath);
-  const pngFilePath = filePath.replace('.svg', '.png');
+  const pngFilePath = filePath.replace(new RegExp('svg', 'g'), 'png');
+  console.log(pngFilePath);
   // const pdfFilePath = filePath.replace('.svg', '.pdf');
 
-  svg2png(svg).then(png => fs.writeFileSync(pngFilePath, png))
+  svg2png(svg).then(png => fs.outputFileSync(pngFilePath, png))
 });
