@@ -47,7 +47,6 @@ const svgFiles = glob.sync(`${svgRoot}/**/*.svg`);
 svgFiles.forEach(filePath => {
   const svg = fs.readFileSync(filePath);
   const pngFilePath = filePath.replace(new RegExp('svg', 'g'), 'png');
-  console.log(pngFilePath);
   // const pdfFilePath = filePath.replace('.svg', '.pdf');
 
   svg2png(svg).then(png => fs.outputFileSync(pngFilePath, png))
