@@ -20,7 +20,7 @@ originalColorFiles.forEach(filePath => {
   const svg = fs.readFileSync(filePath, 'utf-8');
 
   generateColors.forEach(color => {
-    const generatedPath = filePath.replace(originalColor.name, color.name);
+    const generatedPath = filePath.replace(new RegExp(originalColor.name, 'g'), color.name);
 
     const generatedSvg = posthtml([
       function(tree) {
