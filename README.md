@@ -4,7 +4,7 @@
 
 - Clone this repo
 - Run `npm i`
-- Edit `config.js`
+- Edit path to your icons in `config.js`. Otherwise a sample directory will be used.
 - Run `node index.js`
 - Enjoy!
 
